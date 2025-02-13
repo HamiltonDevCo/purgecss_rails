@@ -18,6 +18,7 @@ module PurgecssRails
 
     def set_safelist_classes(*class_names)
       @safelist_classes = class_names
+      self
     end
 
     def ignore_files
