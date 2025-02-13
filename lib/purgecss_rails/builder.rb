@@ -16,6 +16,10 @@ module PurgecssRails
       self
     end
 
+    def set_safelist_classes(*class_names)
+      @safelist_classes = class_names
+    end
+
     def ignore_files
       return @ignore_files if @ignore_files.present?
       @ignore_files = @css_files.select do |f|
@@ -35,7 +39,7 @@ module PurgecssRails
         print "purging #{f}\n"
       end
 
-      @result = `#{purge_css_executable} --css #{ignore_files.join(" ")} --content #{html_files_match.join(" ")}`
+      @result = `#{purge_css_executable} --css #{ignore_files.join(" ")} --content #{html_files_match.join(" ")} --safelist #{safelist_classes.join(" ")}`
       @result = JSON.parse(result)
 
       result.each do |result_item|
@@ -58,10 +62,11 @@ module PurgecssRails
       @css_files = []
       @html_files_match = []
       @ignore_files = []
+      @safelist_classes = []
     end
 
     private
 
-    attr_reader :purge_css_executable, :css_files, :html_files_match, :result
+    attr_reader :purge_css_executable, :css_files, :html_files_match, :safelist_classes, :result
   end
 end
